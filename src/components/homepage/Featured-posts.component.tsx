@@ -1,8 +1,17 @@
-type Props = {}
+import classes from './featured-posts.module.css'
+import PostsGrid from '../posts/posts-gird.component'
+import { PostItemType } from '@/types/PostItem'
 
-const FeaturedPosts = (props: Props) => {
+type Props = {
+  posts:Array<PostItemType>
+}
+
+const FeaturedPosts = ({posts}: Props) => {
   return (
-    <div>FeaturedPosts</div>
+    <section className={classes.latest}>
+      <h2>Featured posts</h2>
+      <PostsGrid posts={posts}/>
+    </section>
   )
 }
 
