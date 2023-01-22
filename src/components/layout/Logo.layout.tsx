@@ -4,7 +4,7 @@ type Props = {}
 
 const Logo = (props: Props) => {
   return (
-    <div className={classes.logo}>Yiang's Next blog</div>
+    <div className={classes.logo}>Yiang&apos;s Next blog</div>
   )
 }
 

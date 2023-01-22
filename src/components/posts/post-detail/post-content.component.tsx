@@ -17,16 +17,18 @@ const PostContent = ({postData:{data,content}}: Props) => {
         <PostHeader title={data.title} image={`/images/posts/${data.image}`}/>
         <ReactMarkdown 
          components={{
-          code({node, inline, className, children, ...props}) {
+          code({node, inline, className, children, style, ...props}) {
             const match = /language-(\w+)/.exec(className || '')
             return !inline && match ? (
               <SyntaxHighlighter
-                children={String(children).replace(/\n$/, '')}
+                
                 style={dark}
                 language={match[1]}
                 PreTag="div"
                 {...props}
-              />
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
             ) : (
               <code className={className} {...props}>
                 {children}
