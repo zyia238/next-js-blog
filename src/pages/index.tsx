@@ -2,46 +2,29 @@ import FeaturedPosts from "@/components/homepage/Featured-posts.component"
 import Hero from "@/components/homepage/Hero.component"
 import { PostItemType } from "@/types/PostItem"
 
-type Props = {}
+type Props = {
+  featuredDataArr:Array<PostItemType>
+}
 
-const DUMMY_POSTS : Array<PostItemType> = [
-  {
-    title:'1',
-    image:'1.jpg',
-    excerpt:'1',
-    date:'1',
-    slug:'1'
-  },
-  {
-    title:'2',
-    image:'1.jpg',
-    excerpt:'2',
-    date:'2',
-    slug:'2'
-  },
-  {
-    title:'3',
-    image:'1.jpg',
-    excerpt:'3',
-    date:'3',
-    slug:'3'
-  },
-  {
-    title:'4',
-    image:'1.jpg',
-    excerpt:'4',
-    date:'4',
-    slug:'4'
-  },
-]
-
-const Home = (props: Props) => {
+const Home = ({featuredDataArr}: Props) => {
   return (
     <>
       <Hero/>
-      <FeaturedPosts posts={DUMMY_POSTS}/>
+      <FeaturedPosts posts={featuredDataArr}/>
     </>
   )
+}
+
+import {getFeaturedPosts} from '@/utils/getPost'
+
+export async function getStaticProps(){
+  const featuredDataArr = await getFeaturedPosts()
+  return {
+    props:{
+      featuredDataArr
+    },
+    revalidate:100
+  }
 }
 
 export default Home

@@ -1,22 +1,40 @@
+import ReactMarkdown from "react-markdown"
+import {Prism as SyntaxHighlighter}  from 'react-syntax-highlighter'
+import {dark} from 'react-syntax-highlighter/dist/cjs/styles/prism'
+
 import PostHeader from "./post-header.component"
 import classes from './post-content.module.css'
+import { PostItemType } from "@/types/PostItem"
 
-const DummyPost =  {
-    title:'1',
-    image:'1.jpg',
-    excerpt:'1',
-    date:'1',
-    slug:'1',
-    content:'# This is markdown syntax'
+type Props = {
+  postData:PostItemType
 }
 
-type Props = {}
+const PostContent = ({postData:{data,content}}: Props) => {
 
-const PostContent = (props: Props) => {
   return (
     <article className={classes.content}>
-        <PostHeader title={DummyPost.title} image={`/images/posts/${DummyPost.image}`}/>
-        {DummyPost.content}
+        <PostHeader title={data.title} image={`/images/posts/${data.image}`}/>
+        <ReactMarkdown 
+         components={{
+          code({node, inline, className, children, ...props}) {
+            const match = /language-(\w+)/.exec(className || '')
+            return !inline && match ? (
+              <SyntaxHighlighter
+                children={String(children).replace(/\n$/, '')}
+                style={dark}
+                language={match[1]}
+                PreTag="div"
+                {...props}
+              />
+            ) : (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            )
+          }
+        }}
+        >{content}</ReactMarkdown>
     </article>
   )
 }

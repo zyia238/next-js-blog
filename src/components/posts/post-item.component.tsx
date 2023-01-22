@@ -3,14 +3,17 @@ import Image from "next/image"
 import classes from './post-item.module.css'
 
 type Props = {
-    title:string,
-    image:string,
-    excerpt:string,
-    date:string,
-    slug:string
+    data:{
+        title:string,
+        image:string,
+        excerpt:string,
+        date:string,
+        slug:string
+    },
+    content:string
 }
 
-const PostItem = ({title,image,excerpt,date,slug}: Props) => {
+const PostItem = ({data:{title,image,excerpt,date,slug}}: Props) => {
   const fullImagePath = `/images/posts/${image}`
 
   return (

@@ -1,43 +1,26 @@
 import AllPosts from "@/components/posts/all-posts.component"
 import { PostItemType } from "@/types/PostItem"
 
-type Props = {}
+type Props = {
+  allPost:Array<PostItemType>
+}
 
-const DUMMY_POSTS : Array<PostItemType> = [
-  {
-    title:'1',
-    image:'1.jpg',
-    excerpt:'1',
-    date:'1',
-    slug:'1'
-  },
-  {
-    title:'2',
-    image:'1.jpg',
-    excerpt:'2',
-    date:'2',
-    slug:'2'
-  },
-  {
-    title:'3',
-    image:'1.jpg',
-    excerpt:'3',
-    date:'3',
-    slug:'3'
-  },
-  {
-    title:'4',
-    image:'1.jpg',
-    excerpt:'4',
-    date:'4',
-    slug:'4'
-  },
-]
 
-const PostPage = (props: Props) => {
+const PostPage = ({allPost}: Props) => {
   return (
-    <AllPosts posts={DUMMY_POSTS}/>
+    <AllPosts posts={allPost} />
   )
+}
+
+import {getAllPosts} from '@/utils/getPost'
+
+export async function getStaticProps(){
+  const allPost = await getAllPosts()
+  return {
+    props:{
+      allPost
+    },
+  }
 }
 
 export default PostPage
