@@ -1,5 +1,6 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import classes from './contact-form.module.css'
+import { Notification, NotificationStatus } from '@/components/ui/notification.component';
 
 type Props = {}
 
@@ -7,10 +8,21 @@ const ContactForm = (props: Props) => {
   const [enteredEmail,seteEteredEmail] = useState('')
   const [enteredName,seteEteredName] = useState('')
   const [enteredMessage,seteEteredMessage] = useState('')
-  const sendMessageHandler = (e:FormEvent) => {
-    e.preventDefault()
+  const [requestStatus, setRequestStatus] = useState<NotificationStatus>();
 
-    fetch('/api/contact',{
+  useEffect(() => {
+    if (requestStatus === 'success' || requestStatus === 'error') {
+        const timer = setTimeout(() => {
+            setRequestStatus(undefined);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }
+}, [requestStatus]);
+  
+  const sendMessageHandler = async (e:FormEvent) => {
+    e.preventDefault()
+    setRequestStatus('pending')
+    const res = await fetch('/api/contact',{
         method:'POST',
         body:JSON.stringify({
             email:enteredEmail,
@@ -18,11 +30,14 @@ const ContactForm = (props: Props) => {
             message:enteredMessage
         },
         )
-    }).then(res=>{
-        return res.json()
-    }).then(data => {
-        console.log(data)
     })
+    if(!res.ok){
+        setRequestStatus('error')    
+        throw new Error('something went wrong!')
+    }
+    const data = res.json()
+    setRequestStatus('success')
+    console.log(data)
   }
 
   return (
@@ -66,6 +81,8 @@ const ContactForm = (props: Props) => {
                 <button>Send Message</button>
             </div>
         </form>
+
+        {requestStatus && <Notification title={requestStatus} message={requestStatus} status={requestStatus} />}
     </section>
 );
 }
